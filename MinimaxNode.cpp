@@ -29,7 +29,7 @@ qint16 MinimaxNode::getValue() const
 void MinimaxNode::setValue(qint16 nValue)
 {
     if ((this->getBoard()->getWhoseTurn() == WHITE_CELL && nValue < this->value)
-            || this->getBoard()->getWhoseTurn() == BLACK_CELL && nValue > this->value)
+            || (this->getBoard()->getWhoseTurn() == BLACK_CELL && nValue > this->value))
         return;
 
     this->value = nValue;

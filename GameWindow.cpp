@@ -39,15 +39,6 @@ void GameWindow::handleGameOver(CELL_STATE)
 }
 
 //private slot
-void GameWindow::on_toolButton_clicked()
-{
-    /*
-    this->ui->widget->getBoard()->calculateBestMove(this->ui->widget->getBoard()->getWhoseTurn());
-    this->ui->widget->update();
-    */
-}
-
-//private slot
 void GameWindow::on_actionVs_AI_triggered()
 {
     this->setGame(QSharedPointer<ReversiGame>(new AIReversiGame()));

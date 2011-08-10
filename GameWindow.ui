@@ -18,13 +18,6 @@
     <item>
      <widget class="ReversiBoardWidget" name="widget" native="true"/>
     </item>
-    <item>
-     <widget class="QToolButton" name="toolButton">
-      <property name="text">
-       <string>...</string>
-      </property>
-     </widget>
-    </item>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>

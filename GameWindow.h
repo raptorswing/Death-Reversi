@@ -23,8 +23,6 @@ private slots:
 
     void handleGameOver(CELL_STATE);
 
-    void on_toolButton_clicked();
-
     void on_actionVs_AI_triggered();
 
     void on_actionVs_human_triggered();
