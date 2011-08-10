@@ -1,0 +1,11 @@
+Prerequisites
+-------------------
+* Qt 4.7 - certain older versions may work also
+* MSVC, gcc, or some other compiler that works with Qt
+
+Build Instructions
+-------------------
+1. Open the .pro file in QtCreator, then build it
+ -OR-
+1. Run qmake on the .pro file
+2. Run make
