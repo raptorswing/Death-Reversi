@@ -25,6 +25,7 @@ along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 #include <QCoreApplication>
 
 #include "MinimaxSearch.h"
+#include "RecursiveMinimaxSearch.h"
 
 ReversiBoard::ReversiBoard(quint8 size) :
     QObject(0),boardSize(size), board(0), whiteCount(0), blackCount(0), boolGameOver(false)
@@ -389,66 +390,15 @@ BoardPos ReversiBoard::getBestMove() const
 
 void ReversiBoard::calculateBestMove(CELL_STATE forWhom)
 {
-    BoardPos bestMove = {0,0};
-    qint16 currentValue;
-    if (forWhom == WHITE_CELL)
-        currentValue = -5000;
-    else
-        currentValue = 5000;
-    QList<BoardPos> moves = this->getValidMoves(forWhom);
+    Q_UNUSED(forWhom);
 
-    const bool useThreads = true;
-    if (useThreads)
-    {
-        QList<MinimaxSearch *> tempSearches;
-        QList<QFuture<qint16> > results;
-        foreach(BoardPos move, moves)
-        {
-            QSharedPointer<ReversiBoard> simBoard(new ReversiBoard(*this));
-            simBoard->makeMove(move,forWhom);
-            MinimaxSearch * tempSearch = new MinimaxSearch(simBoard,9);
-            tempSearches.append(tempSearch);
-            QFuture<qint16> result = QtConcurrent::run(tempSearch,&MinimaxSearch::doSearch);
-            results.append(result);
-        }
-        foreach(QFuture<qint16> result, results)
-        {
-            while (result.isRunning())
-                QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-        }
-
-        for (int i = 0; i < results.size(); i++)
-        {
-            QFuture<qint16> result = results[i];
-            result.waitForFinished();
-            qint16 value = result.result();
-            const BoardPos move = moves[i];
-            if ((forWhom == WHITE_CELL && value > currentValue)
-                    || (forWhom == BLACK_CELL && value < currentValue))
-            {
-                bestMove = move;
-                currentValue = value;
-            }
-        }
-    }
-    else
-    {
-        foreach(BoardPos move, moves)
-        {
-            QSharedPointer<ReversiBoard> simBoard(new ReversiBoard(*this));
-            simBoard->makeMove(move,forWhom);
-            MinimaxSearch search(simBoard,8);
-            search.doSearch();
-            qint16 value = search.getFinalValue();
-            if ((forWhom == WHITE_CELL && value > currentValue)
-                    || (forWhom == BLACK_CELL && value < currentValue))
-            {
-                bestMove = move;
-                currentValue = value;
-            }
-        }
-    }
-    this->bestMove = bestMove;
+    QSharedPointer<ReversiBoard> board(new ReversiBoard(*this));
+    RecursiveMinimaxSearch search(board,9);
+    const qint16 bestScore = search.doSearch();
+    //qDebug() << "For player" << forWhom;
+    //qDebug() << "Best move has score" << bestScore;
+    this->bestMove = search.getBestMove();
+    //qDebug() << this->bestMove.x << this->bestMove.y;
 }
 
 //private

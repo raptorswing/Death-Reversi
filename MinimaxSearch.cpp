@@ -21,8 +21,11 @@ along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QtDebug>
 
+QMutex precompMutex;
+
 //static
 QHash<ReversiBoard,qint16> MinimaxSearch::precomp = QHash<ReversiBoard,qint16>();
+bool MinimaxSearch::precompsLoaded = false;
 
 MinimaxSearch::MinimaxSearch(QSharedPointer<ReversiBoard> rootNodeBoard,quint8 maxDepth) :
     rootNodeBoard(rootNodeBoard),maxDepth(maxDepth)
@@ -32,12 +35,14 @@ MinimaxSearch::MinimaxSearch(QSharedPointer<ReversiBoard> rootNodeBoard,quint8 m
 
 qint16 MinimaxSearch::doSearch()
 {
+    QMutexLocker lock(&precompMutex);
     if (this->precomp.contains(*rootNodeBoard))
     {
         //qDebug() << "Hit!";
         this->finalValue = this->precomp.value(*rootNodeBoard);
         return this->finalValue;
     }
+    lock.unlock();
 
 
     QSharedPointer<MinimaxNode> rootNode(new MinimaxNode(rootNodeBoard));
@@ -84,6 +89,7 @@ qint16 MinimaxSearch::doSearch()
 
     this->finalValue = rootNode->getValue();
     //qDebug() << "Final value" << this->getFinalValue();
+    lock.relock();
     this->precomp.insert(*rootNodeBoard,this->finalValue);
     return this->finalValue;
 }
@@ -91,4 +97,17 @@ qint16 MinimaxSearch::doSearch()
 qint16 MinimaxSearch::getFinalValue() const
 {
     return this->finalValue;
+}
+
+//static
+void MinimaxSearch::loadPrecomps()
+{
+    if (MinimaxSearch::precompsLoaded)
+        return;
+    MinimaxSearch::precompsLoaded = true;
+}
+
+//private
+void MinimaxSearch::storePrecomps()
+{
 }

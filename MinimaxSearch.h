@@ -23,6 +23,7 @@ along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 #include <QSharedPointer>
 #include <QStack>
 #include <QHash>
+#include <QMutex>
 
 #include "ReversiBoard.h"
 #include "MinimaxNode.h"
@@ -42,6 +43,9 @@ private:
     qint16 finalValue;
 
     static QHash<ReversiBoard,qint16> precomp;
+    static bool precompsLoaded;
+    static void loadPrecomps();
+    static void storePrecomps();
 };
 
 #endif // MINIMAXSEARCH_H

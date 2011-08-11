@@ -26,6 +26,7 @@ const CELL_STATE aiPlayer = WHITE_CELL;
 
 AIReversiGame::AIReversiGame()
 {
+    this->setBoard(QSharedPointer<ReversiBoard>(new ReversiBoard(8)));
 }
 
 //public slot
