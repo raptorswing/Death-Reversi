@@ -65,7 +65,7 @@ quint16 ReversiBoard::getBlackCount() const
 
 qint16 ReversiBoard::getScore() const
 {
-    return this->getWhiteCount() - this->getBlackCount();
+    return (this->getWhiteCount() - this->getBlackCount());
 }
 
 QList<BoardPos> ReversiBoard::getValidMoves(CELL_STATE forWhom) const
@@ -388,12 +388,12 @@ BoardPos ReversiBoard::getBestMove() const
     return this->bestMove;
 }
 
-void ReversiBoard::calculateBestMove(CELL_STATE forWhom)
+void ReversiBoard::calculateBestMove(CELL_STATE forWhom,quint8 levels)
 {
     Q_UNUSED(forWhom);
 
     QSharedPointer<ReversiBoard> board(new ReversiBoard(*this));
-    RecursiveMinimaxSearch search(board,9);
+    RecursiveMinimaxSearch search(board,levels);
     const qint16 bestScore = search.doSearch();
     //qDebug() << "For player" << forWhom;
     //qDebug() << "Best move has score" << bestScore;

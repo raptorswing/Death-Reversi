@@ -17,7 +17,7 @@ public:
     BoardPos getBestMove() const;
 
 private:
-    qint16 visit(QSharedPointer<ReversiBoard> board, quint8 depth);
+    qint16 visit(QSharedPointer<ReversiBoard> board, quint8 depth, qint16 alpha, qint16 beta);
     QSharedPointer<ReversiBoard> rootNodesBoard;
     const quint8 maxDepth;
     BoardPos bestMove;

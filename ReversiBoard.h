@@ -68,7 +68,7 @@ public:
 
     BoardPos getBestMove() const;
 
-    void calculateBestMove(CELL_STATE forWhom);
+    void calculateBestMove(CELL_STATE forWhom, quint8 levels);
 
 
 signals:
