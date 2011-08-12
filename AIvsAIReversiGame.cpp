@@ -17,19 +17,16 @@ You should have received a copy of the GNU General Public License
 along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 ---------------------------------------------------------------------
 */
-#include "AIReversiGame.h"
+#include "AIvsAIReversiGame.h"
 
-#include <QTimer>
-#include <QDateTime>
-#include <QtGlobal>
 #include <QtDebug>
+#include <QDateTime>
 
-const CELL_STATE humanPlayer = WHITE_CELL;
-const CELL_STATE aiPlayer = BLACK_CELL;
+const quint16 turnDelayMS = 100;
+const quint8 whiteSearchDepth = 9;
+const quint8 blackSearchDepth = 9;
 
-const quint8 aiSearchDepth = 18;
-
-AIReversiGame::AIReversiGame()
+AIvsAIReversiGame::AIvsAIReversiGame()
 {
     this->setBoard(QSharedPointer<ReversiBoard>(new ReversiBoard(8)));
     this->handleTurnTaken(WHITE_CELL,this->getBoard()->getWhoseTurn());
@@ -37,43 +34,48 @@ AIReversiGame::AIReversiGame()
 }
 
 //public slot
-void AIReversiGame::handleCellClicked(BoardPos where)
+void AIvsAIReversiGame::handleCellClicked(BoardPos where)
 {
-    if (this->getBoard()->getWhoseTurn() != humanPlayer)
-        return;
-    ReversiGame::handleCellClicked(where);
+    Q_UNUSED(where);
+    qDebug() << "Just watch the bots, pathetic human.";
 }
 
 //private slot
-void AIReversiGame::handleTurnTaken(CELL_STATE byWhom, CELL_STATE nextTurn)
+void AIvsAIReversiGame::handleTurnTaken(CELL_STATE byWhom, CELL_STATE nextTurn)
 {
     Q_UNUSED(byWhom);
     if (this->getBoard()->isGameOver())
         return;
-    //If it's the computers turn, make that happen
-    if (nextTurn == aiPlayer)
-    {
-        QTimer::singleShot(50,this,SLOT(makeAIMove()));
-    }
+
+    if (nextTurn == WHITE_CELL)
+        QTimer::singleShot(turnDelayMS,this,SLOT(makeWhiteMove()));
+    else if (nextTurn == BLACK_CELL)
+        QTimer::singleShot(turnDelayMS,this,SLOT(makeBlackMove()));
 }
 
 //private slot
-void AIReversiGame::handleGameOver(CELL_STATE winner)
+void AIvsAIReversiGame::handleGameOver(CELL_STATE winner)
 {
     Q_UNUSED(winner);
 }
 
 //private slot
-void AIReversiGame::handleScoreChanged(quint16 white, quint16 black)
+void AIvsAIReversiGame::handleScoreChanged(quint16 white, quint16 black)
 {
     Q_UNUSED(white);
     Q_UNUSED(black);
 }
 
 //private slot
-void AIReversiGame::makeAIMove()
+void AIvsAIReversiGame::makeWhiteMove()
 {
-    this->getBoard()->calculateBestMove(aiPlayer,aiSearchDepth);
-    this->getBoard()->makeMove(this->getBoard()->getBestMove(),aiPlayer);
-    //qDebug() << "Current score:" << this->getBoard()->getScore();
+    this->getBoard()->calculateBestMove(WHITE_CELL,whiteSearchDepth);
+    this->getBoard()->makeMove(this->getBoard()->getBestMove(),WHITE_CELL);
+}
+
+//private slot
+void AIvsAIReversiGame::makeBlackMove()
+{
+    this->getBoard()->calculateBestMove(BLACK_CELL,blackSearchDepth);
+    this->getBoard()->makeMove(this->getBoard()->getBestMove(),BLACK_CELL);
 }

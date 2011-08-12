@@ -17,41 +17,31 @@ You should have received a copy of the GNU General Public License
 along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 ---------------------------------------------------------------------
 */
-#ifndef GAMEWINDOW_H
-#define GAMEWINDOW_H
+#ifndef AIVSAIREVERSIGAME_H
+#define AIVSAIREVERSIGAME_H
 
-#include <QMainWindow>
-
-#include "ReversiBoard.h"
 #include "ReversiGame.h"
 
-namespace Ui {
-    class GameWindow;
-}
+#include <QTimer>
 
-class GameWindow : public QMainWindow
+class AIvsAIReversiGame : public ReversiGame
 {
     Q_OBJECT
-
 public:
-    explicit GameWindow(QWidget *parent = 0);
-    ~GameWindow();
+    explicit AIvsAIReversiGame();
+
+signals:
+
+public slots:
+    virtual void handleCellClicked(BoardPos where);
 
 private slots:
-    void handleCountChange(quint16 white, quint16 black);
+    virtual void handleTurnTaken(CELL_STATE byWhom, CELL_STATE nextTurn);
+    virtual void handleGameOver(CELL_STATE winner);
+    virtual void handleScoreChanged(quint16 white, quint16 black);
+    void makeWhiteMove();
+    void makeBlackMove();
 
-    void handleGameOver(CELL_STATE);
-
-    void on_actionVs_AI_triggered();
-
-    void on_actionVs_human_triggered();
-
-    void on_actionAI_vs_AI_triggered();
-
-private:
-    void setGame(QSharedPointer<ReversiGame> game);
-    Ui::GameWindow *ui;
-    QSharedPointer<ReversiGame> game;
 };
 
-#endif // GAMEWINDOW_H
+#endif // AIVSAIREVERSIGAME_H

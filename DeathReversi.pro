@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     MinimaxNode.cpp \
     ReversiGame.cpp \
     AIReversiGame.cpp \
-    RecursiveMinimaxSearch.cpp
+    RecursiveMinimaxSearch.cpp \
+    AIvsAIReversiGame.cpp
 
 HEADERS  += GameWindow.h \
     ReversiBoard.h \
@@ -39,6 +40,7 @@ HEADERS  += GameWindow.h \
     MinimaxNode.h \
     ReversiGame.h \
     AIReversiGame.h \
-    RecursiveMinimaxSearch.h
+    RecursiveMinimaxSearch.h \
+    AIvsAIReversiGame.h
 
 FORMS    += GameWindow.ui

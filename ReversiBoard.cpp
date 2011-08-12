@@ -27,8 +27,12 @@ along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 #include "MinimaxSearch.h"
 #include "RecursiveMinimaxSearch.h"
 
+const qint8 cornerCountScoreWorth = 20;
+const qint8 edgeCountScoreWorth = 10;
+
 ReversiBoard::ReversiBoard(quint8 size) :
-    QObject(0),boardSize(size), board(0), whiteCount(0), blackCount(0), boolGameOver(false)
+    QObject(0),boardSize(size), board(0), whiteCount(0), blackCount(0), boolGameOver(false), whiteCornerCount(0),
+    blackCornerCount(0)
 {
     this->initializeBoard();
 }
@@ -41,6 +45,8 @@ ReversiBoard::ReversiBoard(const ReversiBoard & other) :
     this->whiteCount = other.getWhiteCount();
     this->blackCount = other.getBlackCount();
     this->boolGameOver = other.isGameOver();
+    this->whiteCornerCount = other.getWhiteCornerCount();
+    this->blackCornerCount = other.getBlackCornerCount();
 
     const quint16 numCells = this->boardSize*this->boardSize;
     this->board = new CELL_STATE[numCells];
@@ -63,9 +69,21 @@ quint16 ReversiBoard::getBlackCount() const
     return this->blackCount;
 }
 
+quint8 ReversiBoard::getWhiteCornerCount() const
+{
+    return this->whiteCornerCount;
+}
+
+quint8 ReversiBoard::getBlackCornerCount() const
+{
+    return this->blackCornerCount;
+}
+
 qint16 ReversiBoard::getScore() const
 {
-    return (this->getWhiteCount() - this->getBlackCount());
+    return (this->getWhiteCount() - this->getBlackCount())
+            + cornerCountScoreWorth*this->getWhiteCornerCount()
+            - cornerCountScoreWorth*this->getBlackCornerCount();
 }
 
 QList<BoardPos> ReversiBoard::getValidMoves(CELL_STATE forWhom) const
@@ -322,6 +340,17 @@ bool ReversiBoard::makeMove(BoardPos pos, CELL_STATE forWhom)
     if (!this->isValidMove(pos,forWhom,&flips))
         return false;
 
+    const quint8 boardSize = this->getBoardSize();
+    //Update corner counts
+    if ((pos.x == 0 && pos.y == 0) || (pos.x == 0 && pos.y == boardSize-1)
+            || (pos.x == boardSize-1 && pos.y == 0) || (pos.x == boardSize-1 && pos.y == boardSize-1))
+    {
+        if (forWhom == WHITE_CELL)
+            this->whiteCornerCount++;
+        else
+           this->blackCornerCount++;
+    }
+
     //do the move with flips
     foreach(BoardPos theirPos, flips)
     {
@@ -394,7 +423,7 @@ void ReversiBoard::calculateBestMove(CELL_STATE forWhom,quint8 levels)
 
     QSharedPointer<ReversiBoard> board(new ReversiBoard(*this));
     RecursiveMinimaxSearch search(board,levels);
-    const qint16 bestScore = search.doSearch();
+    search.doSearch();
     //qDebug() << "For player" << forWhom;
     //qDebug() << "Best move has score" << bestScore;
     this->bestMove = search.getBestMove();

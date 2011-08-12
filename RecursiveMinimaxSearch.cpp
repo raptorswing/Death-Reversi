@@ -1,3 +1,22 @@
+//Copyright 2011 Spencer Clark
+/*
+---------------------------------------------------------------------
+This file is part of DeathReversi.
+
+DeathReversi is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+DeathReversi is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
+---------------------------------------------------------------------
+*/
 #include "RecursiveMinimaxSearch.h"
 
 #include <QtConcurrentRun>
@@ -5,7 +24,7 @@
 #include <QCoreApplication>
 
 quint16 guiRedrawCounter = 0;
-const quint16 GUI_REDRAW_INTERVAL = 1000;
+const quint16 GUI_REDRAW_INTERVAL = 9000;
 
 RecursiveMinimaxSearch::RecursiveMinimaxSearch(QSharedPointer<ReversiBoard> rootNodesBoard,quint8 maxDepth) :
     rootNodesBoard(rootNodesBoard), maxDepth(maxDepth)
@@ -18,7 +37,9 @@ RecursiveMinimaxSearch::~RecursiveMinimaxSearch()
 
 qint16 RecursiveMinimaxSearch::doSearch()
 {
-    return this->visit(this->rootNodesBoard,0,-10000,10000);
+    const qint16 estimatedBestScore = this->visit(this->rootNodesBoard,0,-10000,10000);
+    //qDebug() << "AI hopes for no worse than" << estimatedBestScore << "in" << this->maxDepth << "moves";
+    return estimatedBestScore;
 }
 
 //private
@@ -59,16 +80,16 @@ qint16 RecursiveMinimaxSearch::visit(QSharedPointer<ReversiBoard> board, quint8 
             if (beta <= alpha)
                 break;
         }
-        else
+        else if (whoseTurn == BLACK_CELL)
         {
-            if (score <= beta)
+            if (score < beta)
             {
                 beta = score;
                 bestMove = move;
             }
             else if (score == beta && qrand() % 2)
                 bestMove = move;
-            if (beta >= alpha)
+            if (beta <= alpha)
                 break;
         }
 

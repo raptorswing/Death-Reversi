@@ -40,6 +40,7 @@
      </property>
      <addaction name="actionVs_AI"/>
      <addaction name="actionVs_human"/>
+     <addaction name="actionAI_vs_AI"/>
     </widget>
     <addaction name="menuNew_Game"/>
    </widget>
@@ -47,12 +48,17 @@
   </widget>
   <action name="actionVs_AI">
    <property name="text">
-    <string>vs. AI</string>
+    <string>You vs. AI</string>
    </property>
   </action>
   <action name="actionVs_human">
    <property name="text">
-    <string>vs. human</string>
+    <string>You vs. human</string>
+   </property>
+  </action>
+  <action name="actionAI_vs_AI">
+   <property name="text">
+    <string>AI vs. AI</string>
    </property>
   </action>
  </widget>

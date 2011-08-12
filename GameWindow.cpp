@@ -22,6 +22,7 @@ along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ReversiGame.h"
 #include "AIReversiGame.h"
+#include "AIvsAIReversiGame.h"
 
 #include <QtDebug>
 
@@ -69,6 +70,12 @@ void GameWindow::on_actionVs_human_triggered()
     this->setGame(QSharedPointer<ReversiGame>(new ReversiGame()));
 }
 
+//private slot
+void GameWindow::on_actionAI_vs_AI_triggered()
+{
+    this->setGame(QSharedPointer<ReversiGame>(new AIvsAIReversiGame()));
+}
+
 //private
 void GameWindow::setGame(QSharedPointer<ReversiGame> game)
 {
@@ -92,5 +99,3 @@ void GameWindow::setGame(QSharedPointer<ReversiGame> game)
             this,
             SLOT(handleCountChange(quint16,quint16)));
 }
-
-
