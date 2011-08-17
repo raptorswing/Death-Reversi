@@ -26,7 +26,7 @@ class AIReversiGame : public ReversiGame
 {
     Q_OBJECT
 public:
-    explicit AIReversiGame();
+    explicit AIReversiGame(CELL_STATE humanPlayer=WHITE_CELL);
 
 signals:
 
@@ -38,6 +38,10 @@ private slots:
     virtual void handleGameOver(CELL_STATE winner);
     virtual void handleScoreChanged(quint16 white, quint16 black);
     virtual void makeAIMove();
+
+private:
+    CELL_STATE aiPlayer;
+    CELL_STATE humanPlayer;
 
 };
 

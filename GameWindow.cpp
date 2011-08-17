@@ -59,12 +59,6 @@ void GameWindow::handleGameOver(CELL_STATE)
 }
 
 //private slot
-void GameWindow::on_actionVs_AI_triggered()
-{
-    this->setGame(QSharedPointer<ReversiGame>(new AIReversiGame()));
-}
-
-//private slot
 void GameWindow::on_actionVs_human_triggered()
 {
     this->setGame(QSharedPointer<ReversiGame>(new ReversiGame()));
@@ -74,6 +68,18 @@ void GameWindow::on_actionVs_human_triggered()
 void GameWindow::on_actionAI_vs_AI_triggered()
 {
     this->setGame(QSharedPointer<ReversiGame>(new AIvsAIReversiGame()));
+}
+
+//private slot
+void GameWindow::on_actionPlay_as_White_triggered()
+{
+    this->setGame(QSharedPointer<ReversiGame>(new AIReversiGame(WHITE_CELL)));
+}
+
+//private slot
+void GameWindow::on_actionPlay_as_Black_triggered()
+{
+    this->setGame(QSharedPointer<ReversiGame>(new AIReversiGame(BLACK_CELL)));
 }
 
 //private

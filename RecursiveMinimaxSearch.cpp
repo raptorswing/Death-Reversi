@@ -22,13 +22,16 @@ along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtConcurrentRun>
 #include <QList>
 #include <QCoreApplication>
+#include <QtDebug>
 
 quint16 guiRedrawCounter = 0;
-const quint16 GUI_REDRAW_INTERVAL = 9000;
+const quint16 GUI_REDRAW_INTERVAL = 8000;
 
 RecursiveMinimaxSearch::RecursiveMinimaxSearch(QSharedPointer<ReversiBoard> rootNodesBoard,quint8 maxDepth) :
     rootNodesBoard(rootNodesBoard), maxDepth(maxDepth)
 {
+    BoardPos bestMove = {0,0};
+    this->bestMove = bestMove;
 }
 
 RecursiveMinimaxSearch::~RecursiveMinimaxSearch()
@@ -38,7 +41,6 @@ RecursiveMinimaxSearch::~RecursiveMinimaxSearch()
 qint16 RecursiveMinimaxSearch::doSearch()
 {
     const qint16 estimatedBestScore = this->visit(this->rootNodesBoard,0,-10000,10000);
-    //qDebug() << "AI hopes for no worse than" << estimatedBestScore << "in" << this->maxDepth << "moves";
     return estimatedBestScore;
 }
 
@@ -66,7 +68,7 @@ qint16 RecursiveMinimaxSearch::visit(QSharedPointer<ReversiBoard> board, quint8 
         QSharedPointer<ReversiBoard> simBoard(new ReversiBoard(*board));
         simBoard->makeMove(move,whoseTurn);
 
-        qint16 score = this->visit(simBoard,depth+1,alpha,beta);
+        qint16 score = this->visit(simBoard,depth,alpha,beta);
 
         if (whoseTurn == WHITE_CELL)
         {
@@ -77,6 +79,7 @@ qint16 RecursiveMinimaxSearch::visit(QSharedPointer<ReversiBoard> board, quint8 
             }
             else if (score == alpha && qrand() % 2)
                 bestMove = move;
+
             if (beta <= alpha)
                 break;
         }
@@ -89,6 +92,7 @@ qint16 RecursiveMinimaxSearch::visit(QSharedPointer<ReversiBoard> board, quint8 
             }
             else if (score == beta && qrand() % 2)
                 bestMove = move;
+
             if (beta <= alpha)
                 break;
         }
@@ -100,7 +104,6 @@ qint16 RecursiveMinimaxSearch::visit(QSharedPointer<ReversiBoard> board, quint8 
         return alpha;
     else
         return beta;
-
 }
 
 BoardPos RecursiveMinimaxSearch::getBestMove() const

@@ -38,7 +38,14 @@
      <property name="title">
       <string>New Game</string>
      </property>
-     <addaction name="actionVs_AI"/>
+     <widget class="QMenu" name="menuYou_vs_AI">
+      <property name="title">
+       <string>You vs. AI</string>
+      </property>
+      <addaction name="actionPlay_as_White"/>
+      <addaction name="actionPlay_as_Black"/>
+     </widget>
+     <addaction name="menuYou_vs_AI"/>
      <addaction name="actionVs_human"/>
      <addaction name="actionAI_vs_AI"/>
     </widget>
@@ -46,11 +53,6 @@
    </widget>
    <addaction name="menuFile"/>
   </widget>
-  <action name="actionVs_AI">
-   <property name="text">
-    <string>You vs. AI</string>
-   </property>
-  </action>
   <action name="actionVs_human">
    <property name="text">
     <string>You vs. human</string>
@@ -59,6 +61,16 @@
   <action name="actionAI_vs_AI">
    <property name="text">
     <string>AI vs. AI</string>
+   </property>
+  </action>
+  <action name="actionPlay_as_White">
+   <property name="text">
+    <string>Play as White</string>
+   </property>
+  </action>
+  <action name="actionPlay_as_Black">
+   <property name="text">
+    <string>Play as Black</string>
    </property>
   </action>
  </widget>

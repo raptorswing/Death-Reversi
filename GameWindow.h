@@ -42,11 +42,13 @@ private slots:
 
     void handleGameOver(CELL_STATE);
 
-    void on_actionVs_AI_triggered();
-
     void on_actionVs_human_triggered();
 
     void on_actionAI_vs_AI_triggered();
+
+    void on_actionPlay_as_White_triggered();
+
+    void on_actionPlay_as_Black_triggered();
 
 private:
     void setGame(QSharedPointer<ReversiGame> game);

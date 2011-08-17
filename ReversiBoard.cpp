@@ -27,12 +27,12 @@ along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 #include "MinimaxSearch.h"
 #include "RecursiveMinimaxSearch.h"
 
-const qint8 cornerCountScoreWorth = 20;
-const qint8 edgeCountScoreWorth = 10;
+const qint8 cornerCountScoreWorth = 00;
+const qint8 edgeCountScoreWorth = 2;
 
 ReversiBoard::ReversiBoard(quint8 size) :
     QObject(0),boardSize(size), board(0), whiteCount(0), blackCount(0), boolGameOver(false), whiteCornerCount(0),
-    blackCornerCount(0)
+    blackCornerCount(0), whiteEdgeCount(0),blackEdgeCount(0)
 {
     this->initializeBoard();
 }
@@ -47,6 +47,8 @@ ReversiBoard::ReversiBoard(const ReversiBoard & other) :
     this->boolGameOver = other.isGameOver();
     this->whiteCornerCount = other.getWhiteCornerCount();
     this->blackCornerCount = other.getBlackCornerCount();
+    this->whiteEdgeCount = other.getWhiteEdgeCount();
+    this->blackEdgeCount = other.getBlackEdgeCount();
 
     const quint16 numCells = this->boardSize*this->boardSize;
     this->board = new CELL_STATE[numCells];
@@ -79,11 +81,35 @@ quint8 ReversiBoard::getBlackCornerCount() const
     return this->blackCornerCount;
 }
 
+quint16 ReversiBoard::getWhiteEdgeCount() const
+{
+    return this->whiteEdgeCount;
+}
+
+quint16 ReversiBoard::getBlackEdgeCount() const
+{
+    return this->blackEdgeCount;
+}
+
 qint16 ReversiBoard::getScore() const
 {
-    return (this->getWhiteCount() - this->getBlackCount())
-            + cornerCountScoreWorth*this->getWhiteCornerCount()
-            - cornerCountScoreWorth*this->getBlackCornerCount();
+    const qint16 basic = this->getWhiteCount() - this->getBlackCount();
+    const qint16 edges = this->getWhiteEdgeCount() * edgeCountScoreWorth
+            - this->getBlackEdgeCount() * edgeCountScoreWorth;
+    const qint16 score = basic
+            + (cornerCountScoreWorth*this->getWhiteCornerCount())
+            - (cornerCountScoreWorth*this->getBlackCornerCount())
+            + edges;
+
+    /*
+    if ((score > 0 && basic < 0)
+            || (score < 0 && basic > 0))
+    {
+        qDebug() << "Mismatch";
+    }
+    */
+
+    return score;
 }
 
 QList<BoardPos> ReversiBoard::getValidMoves(CELL_STATE forWhom) const
@@ -348,8 +374,9 @@ bool ReversiBoard::makeMove(BoardPos pos, CELL_STATE forWhom)
         if (forWhom == WHITE_CELL)
             this->whiteCornerCount++;
         else
-           this->blackCornerCount++;
+            this->blackCornerCount++;
     }
+
 
     //do the move with flips
     foreach(BoardPos theirPos, flips)
@@ -372,6 +399,34 @@ bool ReversiBoard::makeMove(BoardPos pos, CELL_STATE forWhom)
             this->gameOver(this->getWinningColor());
         }
     }
+
+    //Update edge counts
+    quint16 wCount = 0;
+    quint16 bCount = 0;
+    for (quint8 x = 0; x < boardSize; x++)
+    {
+        for (quint8 y = 0; y < boardSize; y++)
+        {
+            BoardPos pos = {x,y};
+            if (pos.x == 0 || pos.y == 0 || pos.x == boardSize-1 || pos.y == boardSize-1)
+            {
+                const CELL_STATE owner = this->getCell(pos);
+                if (owner == WHITE_CELL)
+                {
+                    ++wCount;
+                    //qDebug() << pos.x << pos.y << "is white";
+                }
+                else if (owner == BLACK_CELL)
+                {
+                    ++bCount;
+                    //qDebug() << pos.x << pos.y << "is black";
+                }
+            }
+        }
+    }
+    this->whiteEdgeCount = wCount;
+    this->blackEdgeCount = bCount;
+
     this->moveMade(forWhom,this->getWhoseTurn());
     return true;
 }
@@ -563,3 +618,5 @@ void ReversiBoard::decrementCount(CELL_STATE color)
         this->whiteCount--;
     this->countChanged(this->getWhiteCount(),this->getBlackCount());
 }
+
+

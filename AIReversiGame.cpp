@@ -24,13 +24,16 @@ along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtGlobal>
 #include <QtDebug>
 
-const CELL_STATE humanPlayer = WHITE_CELL;
-const CELL_STATE aiPlayer = BLACK_CELL;
+const quint8 aiSearchDepth = 10;
 
-const quint8 aiSearchDepth = 18;
-
-AIReversiGame::AIReversiGame()
+AIReversiGame::AIReversiGame(CELL_STATE humanPlayer) :
+    humanPlayer(humanPlayer)
 {
+    if (humanPlayer == WHITE_CELL)
+        this->aiPlayer = BLACK_CELL;
+    else
+        this->aiPlayer = WHITE_CELL;
+
     this->setBoard(QSharedPointer<ReversiBoard>(new ReversiBoard(8)));
     this->handleTurnTaken(WHITE_CELL,this->getBoard()->getWhoseTurn());
     qsrand(QDateTime::currentDateTime().toTime_t());
@@ -39,7 +42,7 @@ AIReversiGame::AIReversiGame()
 //public slot
 void AIReversiGame::handleCellClicked(BoardPos where)
 {
-    if (this->getBoard()->getWhoseTurn() != humanPlayer)
+    if (this->getBoard()->getWhoseTurn() != this->humanPlayer)
         return;
     ReversiGame::handleCellClicked(where);
 }
@@ -47,11 +50,12 @@ void AIReversiGame::handleCellClicked(BoardPos where)
 //private slot
 void AIReversiGame::handleTurnTaken(CELL_STATE byWhom, CELL_STATE nextTurn)
 {
+    qDebug() << this->getBoard()->getScore();
     Q_UNUSED(byWhom);
     if (this->getBoard()->isGameOver())
         return;
     //If it's the computers turn, make that happen
-    if (nextTurn == aiPlayer)
+    if (nextTurn == this->aiPlayer)
     {
         QTimer::singleShot(50,this,SLOT(makeAIMove()));
     }
@@ -73,7 +77,7 @@ void AIReversiGame::handleScoreChanged(quint16 white, quint16 black)
 //private slot
 void AIReversiGame::makeAIMove()
 {
-    this->getBoard()->calculateBestMove(aiPlayer,aiSearchDepth);
-    this->getBoard()->makeMove(this->getBoard()->getBestMove(),aiPlayer);
+    this->getBoard()->calculateBestMove(this->aiPlayer,aiSearchDepth);
+    this->getBoard()->makeMove(this->getBoard()->getBestMove(),this->aiPlayer);
     //qDebug() << "Current score:" << this->getBoard()->getScore();
 }

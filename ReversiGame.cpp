@@ -19,6 +19,8 @@ along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "ReversiGame.h"
 
+#include <QtDebug>
+
 ReversiGame::ReversiGame()
 {
     this->setBoard(QSharedPointer<ReversiBoard>(new ReversiBoard(8)));
@@ -47,6 +49,7 @@ void ReversiGame::handleTurnTaken(CELL_STATE byWhom, CELL_STATE nextTurn)
     Q_UNUSED(byWhom);
     Q_UNUSED(nextTurn);
     //this->turnTaken(byWhom,nextTurn);
+    qDebug() << this->board->getScore();
 }
 
 //private slot

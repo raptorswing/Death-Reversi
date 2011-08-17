@@ -24,6 +24,7 @@ along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QSharedPointer>
 #include <QtGlobal>
+#include <QHash>
 
 class RecursiveMinimaxSearch
 {

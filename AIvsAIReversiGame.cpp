@@ -23,8 +23,8 @@ along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 #include <QDateTime>
 
 const quint16 turnDelayMS = 100;
-const quint8 whiteSearchDepth = 9;
-const quint8 blackSearchDepth = 9;
+const quint8 whiteSearchDepth = 6;
+const quint8 blackSearchDepth = 6;
 
 AIvsAIReversiGame::AIvsAIReversiGame()
 {
@@ -43,6 +43,7 @@ void AIvsAIReversiGame::handleCellClicked(BoardPos where)
 //private slot
 void AIvsAIReversiGame::handleTurnTaken(CELL_STATE byWhom, CELL_STATE nextTurn)
 {
+    qDebug() << this->getBoard()->getScore();
     Q_UNUSED(byWhom);
     if (this->getBoard()->isGameOver())
         return;

@@ -50,6 +50,8 @@ public:
     quint16 getBlackCount() const;
     quint8 getWhiteCornerCount() const;
     quint8 getBlackCornerCount() const;
+    quint16 getWhiteEdgeCount() const;
+    quint16 getBlackEdgeCount() const;
     qint16 getScore() const;
 
     QList<BoardPos> getValidMoves(CELL_STATE forWhom) const;
@@ -97,6 +99,8 @@ private:
     quint16 blackCount;
     quint8 whiteCornerCount;
     quint8 blackCornerCount;
+    quint16 whiteEdgeCount;
+    quint16 blackEdgeCount;
     bool boolGameOver;
 
     BoardPos bestMove;
