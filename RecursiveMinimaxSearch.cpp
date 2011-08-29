@@ -98,8 +98,18 @@ qint16 RecursiveMinimaxSearch::visit(QSharedPointer<ReversiBoard> board, quint8 
         }
 
     }
+
+    /*
+      If we've returned from all of our recursion and are back at level 1 of the tree,
+      then we can say that one move seems better than the others
+    */
     if (depth == 1)
         this->bestMove = bestMove;
+
+    /*
+      Return the score of the board configuration created by optimal-play by both players if the
+      so-called best move is taken
+    */
     if (whoseTurn == WHITE_CELL)
         return alpha;
     else
