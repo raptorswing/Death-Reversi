@@ -23,8 +23,8 @@ along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 #include <QDateTime>
 
 const quint16 turnDelayMS = 100;
-const quint8 whiteSearchDepth = 6;
-const quint8 blackSearchDepth = 6;
+quint8 whiteSearchDepth = 6;
+quint8 blackSearchDepth = 6;
 
 AIvsAIReversiGame::AIvsAIReversiGame()
 {
@@ -38,6 +38,18 @@ void AIvsAIReversiGame::handleCellClicked(BoardPos where)
 {
     Q_UNUSED(where);
     qDebug() << "Just watch the bots, pathetic human.";
+}
+
+//public slot
+void AIvsAIReversiGame::setBlackAIDepth(quint8 depth)
+{
+    blackSearchDepth = depth;
+}
+
+//public slot
+void AIvsAIReversiGame::setWhiteAIDepth(quint8 depth)
+{
+    whiteSearchDepth = depth;
 }
 
 //private slot
@@ -80,3 +92,5 @@ void AIvsAIReversiGame::makeBlackMove()
     this->getBoard()->calculateBestMove(BLACK_CELL,blackSearchDepth);
     this->getBoard()->makeMove(this->getBoard()->getBestMove(),BLACK_CELL);
 }
+
+

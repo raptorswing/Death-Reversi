@@ -19,6 +19,7 @@ along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "GameWindow.h"
 #include "ui_GameWindow.h"
+#include "AIOptionsWidget.h"
 
 #include "ReversiGame.h"
 #include "AIReversiGame.h"
@@ -31,6 +32,9 @@ GameWindow::GameWindow(QWidget *parent) :
     ui(new Ui::GameWindow)
 {
     ui->setupUi(this);
+
+    options.blackSearchDepth = 6;
+    options.whiteSearchDepth = 6;
 }
 
 GameWindow::~GameWindow()
@@ -82,11 +86,41 @@ void GameWindow::on_actionPlay_as_Black_triggered()
     this->setGame(QSharedPointer<ReversiGame>(new AIReversiGame(BLACK_CELL)));
 }
 
+//private slot
+void GameWindow::on_actionAI_Settings_triggered()
+{
+    AIOptionsWidget * widget = new AIOptionsWidget();
+    widget->setAttribute(Qt::WA_DeleteOnClose);
+
+    widget->setBlackSearchDepth(options.blackSearchDepth);
+    widget->setWhiteSearchDepth(options.whiteSearchDepth);
+
+    connect(widget,
+            SIGNAL(AIOptionsChanged(AIOptions)),
+            this,
+            SLOT(handleAIOptionChange(AIOptions)));
+
+    widget->show();
+}
+
+//private slot
+void GameWindow::handleAIOptionChange(AIOptions options)
+{
+    this->options = options;
+    if (game.isNull())
+        return;
+    game->setBlackAIDepth(options.blackSearchDepth);
+    game->setWhiteAIDepth(options.whiteSearchDepth);
+}
+
 //private
 void GameWindow::setGame(QSharedPointer<ReversiGame> game)
 {
     if (game.isNull())
         return;
+
+    //Force us to update the game's AI options
+    this->handleAIOptionChange(this->options);
 
     this->ui->widget->setBoard(game->getBoard());
 

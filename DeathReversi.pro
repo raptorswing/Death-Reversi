@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     ReversiGame.cpp \
     AIReversiGame.cpp \
     RecursiveMinimaxSearch.cpp \
-    AIvsAIReversiGame.cpp
+    AIvsAIReversiGame.cpp \
+    AIOptionsWidget.cpp
 
 HEADERS  += GameWindow.h \
     ReversiBoard.h \
@@ -41,6 +42,8 @@ HEADERS  += GameWindow.h \
     ReversiGame.h \
     AIReversiGame.h \
     RecursiveMinimaxSearch.h \
-    AIvsAIReversiGame.h
+    AIvsAIReversiGame.h \
+    AIOptionsWidget.h
 
-FORMS    += GameWindow.ui
+FORMS    += GameWindow.ui \
+    AIOptionsWidget.ui

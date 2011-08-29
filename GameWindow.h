@@ -24,6 +24,7 @@ along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ReversiBoard.h"
 #include "ReversiGame.h"
+#include "AIOptionsWidget.h"
 
 namespace Ui {
     class GameWindow;
@@ -50,10 +51,15 @@ private slots:
 
     void on_actionPlay_as_Black_triggered();
 
+    void on_actionAI_Settings_triggered();
+
+    void handleAIOptionChange(AIOptions options);
+
 private:
     void setGame(QSharedPointer<ReversiGame> game);
     Ui::GameWindow *ui;
     QSharedPointer<ReversiGame> game;
+    AIOptions options;
 };
 
 #endif // GAMEWINDOW_H

@@ -41,6 +41,8 @@ signals:
 
 public slots:
     virtual void handleCellClicked(BoardPos where);
+    virtual void setBlackAIDepth(quint8 depth);
+    virtual void setWhiteAIDepth(quint8 depth);
 
 private slots:
     virtual void handleTurnTaken(CELL_STATE byWhom, CELL_STATE nextTurn);

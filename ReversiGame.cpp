@@ -43,6 +43,17 @@ void ReversiGame::handleCellClicked(BoardPos where)
                           this->board->getWhoseTurn());
 }
 
+//public slot
+void ReversiGame::setBlackAIDepth(quint8)
+{
+}
+
+//public slot
+void ReversiGame::setWhiteAIDepth(quint8)
+{
+}
+
+
 //private slot
 void ReversiGame::handleTurnTaken(CELL_STATE byWhom, CELL_STATE nextTurn)
 {
@@ -99,7 +110,8 @@ void ReversiGame::setBoard(QSharedPointer<ReversiBoard> nBoard)
             this,
             SIGNAL(scoreChanged(quint16,quint16)));
 
-            this->board = nBoard;
+    this->board = nBoard;
 }
+
 
 

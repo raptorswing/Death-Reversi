@@ -24,7 +24,7 @@ along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtGlobal>
 #include <QtDebug>
 
-const quint8 aiSearchDepth = 10;
+quint8 aiSearchDepth = 10;
 
 AIReversiGame::AIReversiGame(CELL_STATE humanPlayer) :
     humanPlayer(humanPlayer)
@@ -45,6 +45,20 @@ void AIReversiGame::handleCellClicked(BoardPos where)
     if (this->getBoard()->getWhoseTurn() != this->humanPlayer)
         return;
     ReversiGame::handleCellClicked(where);
+}
+
+//public slot
+void AIReversiGame::setBlackAIDepth(quint8 depth)
+{
+    if (this->aiPlayer == BLACK_CELL)
+        aiSearchDepth = depth;
+}
+
+//public slot
+void AIReversiGame::setWhiteAIDepth(quint8 depth)
+{
+    if (this->aiPlayer == WHITE_CELL)
+        aiSearchDepth = depth;
 }
 
 //private slot

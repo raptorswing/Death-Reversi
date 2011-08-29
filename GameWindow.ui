@@ -51,7 +51,14 @@
     </widget>
     <addaction name="menuNew_Game"/>
    </widget>
+   <widget class="QMenu" name="menuOptions">
+    <property name="title">
+     <string>Options</string>
+    </property>
+    <addaction name="actionAI_Settings"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuOptions"/>
   </widget>
   <action name="actionVs_human">
    <property name="text">
@@ -71,6 +78,11 @@
   <action name="actionPlay_as_Black">
    <property name="text">
     <string>Play as Black</string>
+   </property>
+  </action>
+  <action name="actionAI_Settings">
+   <property name="text">
+    <string>AI Settings</string>
    </property>
   </action>
  </widget>
