@@ -50,6 +50,7 @@
      <addaction name="actionAI_vs_AI"/>
     </widget>
     <addaction name="menuNew_Game"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
     <property name="title">
@@ -83,6 +84,11 @@
   <action name="actionAI_Settings">
    <property name="text">
     <string>AI Settings</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
    </property>
   </action>
  </widget>

@@ -139,3 +139,8 @@ void GameWindow::setGame(QSharedPointer<ReversiGame> game)
             this,
             SLOT(handleCountChange(quint16,quint16)));
 }
+
+void GameWindow::on_actionExit_triggered()
+{
+    this->close();
+}

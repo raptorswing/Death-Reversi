@@ -55,6 +55,8 @@ private slots:
 
     void handleAIOptionChange(AIOptions options);
 
+    void on_actionExit_triggered();
+
 private:
     void setGame(QSharedPointer<ReversiGame> game);
     Ui::GameWindow *ui;

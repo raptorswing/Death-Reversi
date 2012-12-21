@@ -27,7 +27,7 @@ along with DeathReversi.  If not, see <http://www.gnu.org/licenses/>.
 #include "MinimaxSearch.h"
 #include "RecursiveMinimaxSearch.h"
 
-const qint8 cornerCountScoreWorth = 0;
+const qint8 cornerCountScoreWorth = 50;
 const qint8 edgeCountScoreWorth = 2;
 
 ReversiBoard::ReversiBoard(quint8 size) :
@@ -96,9 +96,10 @@ qint16 ReversiBoard::getScore() const
     const qint16 basic = this->getWhiteCount() - this->getBlackCount();
     const qint16 edges = this->getWhiteEdgeCount() * edgeCountScoreWorth
             - this->getBlackEdgeCount() * edgeCountScoreWorth;
+    const qint16 corners = (cornerCountScoreWorth*this->getWhiteCornerCount())
+            - (cornerCountScoreWorth*this->getBlackCornerCount());
     const qint16 score = basic
-            + (cornerCountScoreWorth*this->getWhiteCornerCount())
-            - (cornerCountScoreWorth*this->getBlackCornerCount())
+            + corners
             + edges;
 
     /*
@@ -109,7 +110,8 @@ qint16 ReversiBoard::getScore() const
     }
     */
 
-    return score;
+    //return score;
+    return corners;
 }
 
 QList<BoardPos> ReversiBoard::getValidMoves(CELL_STATE forWhom) const
